@@ -1,0 +1,253 @@
+
+:root {
+    --bg-dark: #0a0a12;
+    --text-main: #e0e0e0;
+    --primary: #7000ff;
+    --accent: #00d4ff;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    overflow-x: hidden;
+}
+
+/* --- 2. BACKGROUND ANIMATION --- */
+.background-gradient {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at 10% 20%, #1a0b2e 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, #0b1a2e 0%, transparent 40%);
+    z-index: -1;
+}
+
+/* --- 3. NAVBAR --- */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 5%;
+    backdrop-filter: blur(10px);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #fff, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; /* Standard property */
+    color: transparent; /* Fallback */
+    letter-spacing: 1px;
+}
+
+.nav-links a {
+    color: var(--text-main);
+    text-decoration: none;
+    margin-left: 2rem;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--accent);
+}
+
+/* --- 4. HERO SECTION --- */
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 10%;
+    position: relative;
+}
+
+.hero h1 {
+    font-size: 4rem;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #fff 0%, #a5a5a5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: fadeInUp 1s ease-out;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    color: #aaa;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+    animation: fadeInUp 1.2s ease-out;
+}
+
+.cta-button {
+    padding: 1rem 2.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+    animation: fadeInUp 1.4s ease-out;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+}
+
+/* --- 5. FLOATING 3D CONNECT BUTTON --- */
+.floating-portal {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+/* Target the circle when hovering over the container */
+.floating-portal:hover .portal-circle {
+    width: 200px;
+    border-radius: 50px;
+    box-shadow: 0 0 30px var(--primary);
+    border-color: var(--primary);
+}
+
+.portal-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--accent);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 15px var(--accent);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* The spinning ring animation */
+.portal-circle::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(from 0deg, transparent, var(--accent), transparent);
+    animation: spin 4s linear infinite;
+}
+
+.portal-circle span {
+    z-index: 2;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    transition: opacity 0.3s;
+}
+
+.portal-text {
+    position: absolute;
+    right: 90px;
+    background: var(--glass);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+    border: 1px solid var(--glass-border);
+    color: #fff;
+}
+
+.floating-portal:hover .portal-text {
+    opacity: 1;
+}
+
+/* --- 6. INFO CARDS --- */
+.features {
+    padding: 5rem 10%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    padding: 2rem;
+    border-radius: 16px;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent);
+}
+
+.card h3 {
+    margin-bottom: 1rem;
+    color: var(--accent);
+}
+
+.card p {
+    color: #ccc;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* --- ANIMATIONS --- */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- MOBILE ADJUSTMENTS --- */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 2.5rem; }
+    
+    .floating-portal {
+        top: auto;
+        bottom: 30px;
+        right: 20px;
+        transform: none;
+    }
+    
+    .portal-text {
+        right: 0;
+        bottom: 80px;
+    }
+}
