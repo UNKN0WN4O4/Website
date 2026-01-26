@@ -16,7 +16,7 @@
             <a href="#about">Mission</a>
             <a href="#features">Features</a>
             <a href="#contact">Contact</a>
-            <a href="room.html" class="enter-room-btn">Enter a room</a>
+            <a href="room/room.html" class="enter-room-btn">Enter a room</a>
         </div>
     </nav>
 
@@ -47,6 +47,36 @@
             <p>Spatial audio and calming soundscapes adapt to your mood, helping you decompress as you explore.</p>
         </div>
     </section>
+
+    <div class="floating-room" id="floatingRoom">
+        <button class="room-toggle" id="roomToggle" aria-label="Toggle anonymous room">
+            <span class="room-toggle-dot"></span>
+            <span class="room-toggle-text">Open Room</span>
+        </button>
+
+        <div class="room-window" id="roomWindow" aria-live="polite">
+            <div class="room-header">
+                <div>
+                    <p class="room-title">Anonymous Room</p>
+                    <p class="room-subtitle">Float and chat anywhere.</p>
+                </div>
+                <div class="room-actions">
+                    <button id="roomMinimize" aria-label="Minimize room">—</button>
+                    <button id="roomClose" aria-label="Close room">×</button>
+                </div>
+            </div>
+
+            <div class="room-messages" id="roomMessages">
+                <div class="room-message other">Hey… you’re not alone here.</div>
+                <div class="room-message other">What’s been heavy lately?</div>
+            </div>
+
+            <div class="room-input">
+                <input type="text" id="roomInput" placeholder="Type what you’re feeling..." aria-label="Room message" />
+                <button id="roomSend" aria-label="Send message">Send</button>
+            </div>
+        </div>
+    </div>
 
     <footer class="footer">
         <div class="footer-content">
