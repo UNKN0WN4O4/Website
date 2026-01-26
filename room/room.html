@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SENTINETIX | Room</title>
+  <link rel="stylesheet" href="room.css" />
+</head>
+<body>
+
+  <div class="chat-container">
+    <div class="chat-header">
+      <h2>Anonymous Room</h2>
+      <p>You are safe here. Be human.</p>
+    </div>
+
+    <div class="chat-box" id="chatBox">
+      <div class="message other">Hey… you’re not alone here.</div>
+      <div class="message other">What’s been heavy lately?</div>
+    </div>
+
+    <div class="chat-input">
+      <input type="text" id="messageInput" placeholder="Type what you’re feeling..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script src="room.js"></script>
+</body>
+</html>
