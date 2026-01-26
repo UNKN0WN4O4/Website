@@ -235,6 +235,64 @@ nav {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* --- 7. FOOTER --- */
+footer.footer {
+    background: rgba(10, 10, 18, 0.95);
+    border-top: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    margin-top: 5rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    padding: 2.5rem 10%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.footer-section h4 {
+    color: var(--accent);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.footer-section p {
+    color: #aaa;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-section ul li a {
+    color: #aaa;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.footer-section ul li a:hover {
+    color: var(--accent);
+}
+
+.footer-bottom {
+    border-top: 1px solid var(--glass-border);
+    padding: 2rem 10%;
+    text-align: center;
+    color: #666;
+    font-size: 0.85rem;
+}
+
 /* --- MOBILE ADJUSTMENTS --- */
 @media (max-width: 768px) {
     .hero h1 { font-size: 2.5rem; }
@@ -250,4 +308,15 @@ nav {
         right: 0;
         bottom: 80px;
     }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem 5%;
+    }
+    
+    .footer-bottom {
+        padding: 1.5rem 5%;
+    }
+    
 }
