@@ -55,18 +55,17 @@ document.addEventListener('DOMContentLoaded', () => {
         let suppressToggleClick = false;
         let dragOffsetX = 0;
         let dragOffsetY = 0;
-
-        const roomReplies = [
-            "I hear you. That’s a lot to carry.",
-            "You’re not alone in this.",
-            "It makes sense to feel that way.",
-            "I’m here. Keep going.",
-            "Take your time—we can sit with it.",
-            "Your feelings are valid."
-        ];
+    let isWaitingForResponse = false;
+    const sessionId = 'session_' + Math.random().toString(36).substring(2, 15);
+    const roomReplies = [
+        "I'm here. Keep going.",
+        "Take your time—we can sit with it.",
+        "Your feelings are valid."
+    ];
 
         function openRoom() {
             if (!roomWindow) return;
+            updateRoomDirection();
             roomWindow.classList.add('open');
             roomWindow.classList.remove('collapsed');
             roomToggle?.classList.add('active');
@@ -105,17 +104,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function sendRoomMessage() {
-            if (!roomInput || !roomInput.value.trim()) return;
-            const text = roomInput.value.trim();
-            appendRoomMessage(text, 'you');
-            roomInput.value = '';
+        if (!roomInput || !roomInput.value.trim()) return;
+        const text = roomInput.value.trim();
+        appendRoomMessage(text, 'you');
+        roomInput.value = '';
 
-            setTimeout(() => {
-                const reply = roomReplies[Math.floor(Math.random() * roomReplies.length)];
-                appendRoomMessage(reply, 'other');
-            }, 800);
+        setTimeout(() => {
+            const reply = roomReplies[Math.floor(Math.random() * roomReplies.length)];
+            appendRoomMessage(reply, 'other');
+        }, 800);
         }
 
+        // Event Listeners
         roomToggle?.addEventListener('click', toggleRoom);
         roomClose?.addEventListener('click', closeRoom);
         roomMinimize?.addEventListener('click', minimizeRoom);
@@ -131,6 +131,35 @@ document.addEventListener('DOMContentLoaded', () => {
         enterRoomLink?.addEventListener('click', (e) => {
             e.preventDefault();
             openRoom();
+        });
+
+        function updateRoomDirection() {
+            if (!roomWindow || !roomToggle || !floatingRoom) return;
+            
+            const toggleRect = roomToggle.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            const minRoomHeight = 350; // Minimum comfortable height
+            
+            // Space available below the toggle button
+            const spaceBelow = viewportHeight - toggleRect.bottom - 40;
+            
+            // Space available above the toggle button
+            const spaceAbove = toggleRect.top - 40;
+            
+            // Determine if we should open upward
+            if (spaceBelow < minRoomHeight && spaceAbove > spaceBelow) {
+                // Not enough space below, but more space above
+                floatingRoom.classList.add('open-up');
+            } else {
+                // Enough space below or equal space, open downward
+                floatingRoom.classList.remove('open-up');
+            }
+        }
+
+    window.addEventListener('resize', () => {
+            if (roomWindow?.classList.contains('open')) {
+                updateRoomDirection();
+            }
         });
 
     function startRoomDrag(e) {
