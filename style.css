@@ -1,11 +1,40 @@
 
 :root {
-    --bg-dark: #0a0a12;
+    --bg: #0a0a12;
     --text-main: #e0e0e0;
+    --text-muted: #a6adbd;
     --primary: #7000ff;
     --accent: #00d4ff;
     --glass: rgba(255, 255, 255, 0.05);
+    --glass-strong: rgba(255, 255, 255, 0.08);
     --glass-border: rgba(255, 255, 255, 0.1);
+    --bg-glow-1: #1a0b2e;
+    --bg-glow-2: #0b1a2e;
+    --nav-bg: rgba(10, 10, 18, 0.75);
+    --footer-bg: rgba(10, 10, 18, 0.95);
+    --portal-circle-bg: rgba(0, 0, 0, 0.6);
+    --room-surface: rgba(13, 16, 28, 0.92);
+    --message-other-bg: rgba(255, 255, 255, 0.04);
+    --message-you-bg: linear-gradient(135deg, rgba(112, 0, 255, 0.7), rgba(0, 212, 255, 0.7));
+}
+
+[data-theme="light"] {
+    --bg: #f5f7fb;
+    --text-main: #0f172a;
+    --text-muted: #4b5563;
+    --primary: #5a2dfd;
+    --accent: #12b5e5;
+    --glass: rgba(0, 0, 0, 0.04);
+    --glass-strong: rgba(0, 0, 0, 0.06);
+    --glass-border: rgba(15, 23, 42, 0.08);
+    --bg-glow-1: #d3ddff;
+    --bg-glow-2: #c7f5ff;
+    --nav-bg: rgba(255, 255, 255, 0.85);
+    --footer-bg: rgba(255, 255, 255, 0.9);
+    --portal-circle-bg: rgba(255, 255, 255, 0.85);
+    --room-surface: rgba(255, 255, 255, 0.94);
+    --message-other-bg: rgba(15, 23, 42, 0.06);
+    --message-you-bg: linear-gradient(135deg, rgba(90, 45, 253, 0.85), rgba(18, 181, 229, 0.85));
 }
 
 * {
@@ -17,17 +46,18 @@
 }
 
 body {
-    background-color: var(--bg-dark);
+    background-color: var(--bg);
     color: var(--text-main);
     overflow-x: hidden;
+    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 /* --- 2. BACKGROUND ANIMATION --- */
 .background-gradient {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at 10% 20%, #1a0b2e 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, #0b1a2e 0%, transparent 40%);
+    background: radial-gradient(circle at 10% 20%, var(--bg-glow-1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, var(--bg-glow-2) 0%, transparent 40%);
     z-index: -1;
 }
 
@@ -43,6 +73,14 @@ nav {
     top: 0;
     z-index: 100;
     border-bottom: 1px solid var(--glass-border);
+    background: var(--nav-bg);
+    transition: background 0.4s ease, border-color 0.4s ease;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .logo {
@@ -62,9 +100,47 @@ nav {
     font-size: 0.9rem;
     transition: color 0.3s;
 }
-
+        background: var(--footer-bg);
 .nav-links a:hover {
     color: var(--accent);
+}
+
+.theme-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    color: var(--text-main);
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--glass-strong);
+    border-color: var(--accent);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.theme-toggle-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.45);
+}
+
+.theme-toggle-text {
+    font-size: 0.9rem;
 }
 
 /* --- 4. HERO SECTION --- */
@@ -92,7 +168,7 @@ nav {
 .hero p {
     font-size: 1.2rem;
     max-width: 600px;
-    color: #aaa;
+    color: var(--text-muted);
     margin-bottom: 2.5rem;
     line-height: 1.6;
     animation: fadeInUp 1.2s ease-out;
@@ -176,7 +252,7 @@ nav {
     position: absolute;
     right: 90px;
     background: var(--glass);
-    padding: 0.5rem 1rem;
+    background: var(--portal-circle-bg);
     border-radius: 8px;
     backdrop-filter: blur(5px);
     opacity: 0;
@@ -209,7 +285,7 @@ nav {
 
 .card:hover {
     transform: translateY(-10px);
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--glass-strong);
     border-color: var(--accent);
 }
 
@@ -219,7 +295,7 @@ nav {
 }
 
 .card p {
-    color: #ccc;
+    color: var(--text-muted);
     font-size: 0.95rem;
     line-height: 1.5;
 }
@@ -261,8 +337,8 @@ footer.footer {
 }
 
 .footer-section p {
-    color: #aaa;
-    font-size: 0.9rem;
+    color: var(--text-muted);
+        background: var(--room-surface);
     line-height: 1.6;
 }
 
@@ -275,21 +351,21 @@ footer.footer {
 }
 
 .footer-section ul li a {
-    color: #aaa;
+    color: var(--text-muted);
     text-decoration: none;
     font-size: 0.9rem;
     transition: color 0.3s;
 }
 
 .footer-section ul li a:hover {
-    color: var(--accent);
+        background: var(--glass);
 }
 
 .footer-bottom {
     border-top: 1px solid var(--glass-border);
     padding: 2rem 10%;
     text-align: center;
-    color: #666;
+        color: var(--text-muted);
     font-size: 0.85rem;
 }
 
@@ -304,12 +380,12 @@ footer.footer {
     flex-direction: column;
     align-items: flex-end;
     gap: 12px;
-    z-index: 1200;
+        background: var(--message-other-bg);
     pointer-events: none;
     transform: translateZ(0); /* ensure proper stacking for absolutely positioned window */
 }
 
-.room-toggle {
+        background: var(--message-you-bg);
     pointer-events: auto;
     border: 1px solid var(--glass-border);
     background: linear-gradient(135deg, rgba(112, 0, 255, 0.9), rgba(0, 212, 255, 0.9));
@@ -319,7 +395,7 @@ footer.footer {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    font-weight: 700;
+        background: var(--glass);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
     cursor: grab;
     user-select: none;
@@ -327,7 +403,7 @@ footer.footer {
     transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
-.room-toggle.active {
+        background: var(--glass-strong);
     box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55), 0 0 26px rgba(0, 212, 255, 0.35);
     opacity: 0.95;
 }
