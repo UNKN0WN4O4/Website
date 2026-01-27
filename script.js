@@ -2,32 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const joinButton = document.getElementById('joinButton');
     const ctaButton = document.getElementById('ctaButton');
-    const themeToggle = document.getElementById('themeToggle');
-    const themeToggleText = document.getElementById('themeToggleText');
-
-    const root = document.documentElement;
-    const storedTheme = localStorage.getItem('theme');
-    const initialTheme = storedTheme || 'dark';
-
-    function applyTheme(theme) {
-        root.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-        if (themeToggleText) {
-            themeToggleText.textContent = theme === 'dark' ? 'Dark' : 'Light';
-        }
-        if (themeToggle) {
-            themeToggle.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
-            themeToggle.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
-        }
-    }
-
-    applyTheme(initialTheme);
-
-    themeToggle?.addEventListener('click', () => {
-        const currentTheme = root.getAttribute('data-theme') || initialTheme;
-        const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        applyTheme(nextTheme);
-    });
+    // Removed theme toggle logic
     
     
     function connectToWorld() {
