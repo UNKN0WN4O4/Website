@@ -61,11 +61,87 @@
 <body>
 
     <div id="canvas-container"></div>
+    <div id="bubble-container"></div>
 
     <div class="ui-overlay">
-        <h2>YOU ARE HERE</h2>
         <a href="index.html" class="back-btn">Return to Surface</a>
     </div>
+
+    <!-- Chat Input -->
+    <div class="chat-input-container">
+        <input type="text" id="chatInput" placeholder="Say something..." autocomplete="off">
+    </div>
+
+    <style>
+        /* New Chat Styles */
+        #bubble-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .speech-bubble {
+            position: absolute;
+            background: white;
+            color: black;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            font-size: 0.9rem;
+            max-width: 200px;
+            transform: translate(-50%, -100%);
+            /* Center above point */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s, margin-top 0.3s;
+            z-index: 100;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px 8px 0;
+            border-style: solid;
+            border-color: white transparent transparent transparent;
+        }
+
+        .chat-input-container {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            width: 300px;
+        }
+
+        #chatInput {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            color: white;
+            outline: none;
+            font-size: 1rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        #chatInput:focus {
+            background: rgba(0, 0, 0, 0.8);
+            border-color: var(--accent, #00d4ff);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+        }
+    </style>
 
     <!-- Global Scripts (No Import Map needed for file:// usage) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
