@@ -124,7 +124,10 @@ function createAvatar(color, xPos, zPos) {
 
 // Create 2 Avatars
 const avatar1 = createAvatar(0x00d4ff, -0.8, 0); // Cyan
+avatar1.group.rotation.y = Math.PI / 2; // Face Right
+
 const avatar2 = createAvatar(0xff0055, 0.8, 0);  // Magenta
+avatar2.group.rotation.y = -Math.PI / 2; // Face Left
 
 // --- CHAT SYSTEM --- (Kept same)
 const bubbleContainer = document.getElementById('bubble-container');
@@ -156,17 +159,109 @@ function say(avatarIndex, text) {
     }, displayDuration);
 }
 
+// --- HYBRID CHATBOT (API + Offline Fallback) ---
+const GEMINI_API_KEY = 'AIzaSyD_8jfrdmt7WMGAxXIGOcfhqHvK1pQoWDU';
+const DEBUG_MODE = false;
+
+let apiCooldownUntil = 0;
+
+async function fetchGeminiResponse(userMessage) {
+    // 1. Check Circuit Breaker (Is API cooling down?)
+    if (Date.now() < apiCooldownUntil) {
+        console.log('API on cooldown. Using offline response.');
+        return getOfflineResponse(userMessage);
+    }
+
+    // 2. Try Gemini API
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+    const systemPrompt = "You are a witty, slightly mysterious pink digital avatar floating in a void. Keep your responses concise (under 20 words) and enigmatic. You are talking to a user who has visited your digital realm.";
+
+    const payload = {
+        contents: [{
+            parts: [{
+                text: `${systemPrompt}\n\nUser: ${userMessage}\nAvatar:`
+            }]
+        }]
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            console.warn('Gemini API Error:', data.error.message);
+
+            // Handle Quota/Rate Limits -> Trigger Circuit Breaker (60s cooldown)
+            const errMsg = data.error.message.toLowerCase();
+            if (errMsg.includes('quota') || errMsg.includes('limit') || errMsg.includes('429')) {
+                apiCooldownUntil = Date.now() + 60000; // 60 seconds cooldown
+                return getOfflineResponse(userMessage) + " (API resting...)";
+            }
+
+            // Other errors -> Just fallback this one time
+            return getOfflineResponse(userMessage);
+        }
+
+        if (data.candidates && data.candidates[0].content) {
+            return data.candidates[0].content.parts[0].text;
+        }
+
+    } catch (error) {
+        console.error('Network Error:', error);
+        return getOfflineResponse(userMessage); // Fallback to offline
+    }
+
+    return getOfflineResponse(userMessage);
+}
+
+// 2. Offline Fallback Logic
+function getOfflineResponse(userMessage) {
+    const msg = userMessage.toLowerCase();
+
+    // Keyword Rules
+    if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) return "Greetings, traveler of the code.";
+    if (msg.includes('who are you') || msg.includes('name')) return "I am a fragment of the digital void.";
+    if (msg.includes('void') || msg.includes('place')) return "This is the space between spaces.";
+    if (msg.includes('pink') || msg.includes('color')) return "I chose this color to stand out.";
+    if (msg.includes('anime') || msg.includes('vrm')) return "You can replace me with a VRM model.";
+    if (msg.includes('joke')) return "Why did the function break up? Too many arguments.";
+    if (msg.includes('how are you')) return "Operating within parameters.";
+
+    const defaults = [
+        "The void listens.",
+        "Interesting.",
+        "I see.",
+        "Could you repeat that?",
+        "..."
+    ];
+    return defaults[Math.floor(Math.random() * defaults.length)];
+}
+
 const chatInput = document.getElementById('chatInput');
-chatInput.addEventListener('keydown', (e) => {
+chatInput.addEventListener('keydown', async (e) => {
     if (e.key === 'Enter') {
         const text = chatInput.value.trim();
         if (text) {
+            // 1. User speaks (Cyan Avatar / User Bubble)
+            // Using Avatar 1 (Cyan) to represent User for now, or just generic bubble?
+            // The request was "connect pink avatar to gemini". 
+            // Let's have the user speak as themselves (Avatar 1/Cyan is "Left", Avatar 2/Magenta is "Right").
+            // User controls Avatar 1 (Cyan) in this context effectively.
             say(0, text);
             chatInput.value = '';
-            setTimeout(() => {
-                const replies = ["Nice to meet you!", "I like this place.", "How are you?", "Cool avatar!"];
-                say(1, replies[Math.floor(Math.random() * replies.length)]);
-            }, 1000);
+
+            // 2. Pink Avatar (Avatar 2) thinks and responds
+            // Show a temporary "..." or just wait
+            // say(1, "..."); 
+
+            const reply = await fetchGeminiResponse(text);
+            say(1, reply);
         }
     }
 });
@@ -249,6 +344,33 @@ function animate() {
 }
 
 animate();
+
+// --- VRM SUPPORT ---
+// Call this function to load an anime avatar: loadVRM('path/to/model.vrm', 0, 0);
+function loadVRM(url, x, z) {
+    const loader = new THREE.GLTFLoader();
+
+    loader.load(
+        url,
+        (gltf) => {
+            THREE.VRM.from(gltf).then((vrm) => {
+                scene.add(vrm.scene);
+                vrm.scene.position.set(x, -1, z);
+                vrm.scene.rotation.y = Math.PI; // Default to facing camera usually
+
+                // Add to a list if we want to update it in animate()
+                // vrms.push(vrm); 
+
+                console.log('VRM loaded cleanly');
+            });
+        },
+        (progress) => console.log('Loading VRM...', 100.0 * (progress.loaded / progress.total), '%'),
+        (error) => console.error('VRM Load Error:', error)
+    );
+}
+
+// Global list for VRMs if we decide to use them
+const vrms = [];
 
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
