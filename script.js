@@ -2,29 +2,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const joinButton = document.getElementById('joinButton');
     const ctaButton = document.getElementById('ctaButton');
-    // Removed theme toggle logic
+
 
 
     function connectToWorld() {
         const portal = document.querySelector('.portal-circle');
         const buttonText = document.getElementById('buttonText');
-        const originalText = buttonText.innerText;
 
-
+        // Visual feedback before redirect
         portal.style.width = '200px';
         portal.style.borderRadius = '50px';
         portal.style.background = 'var(--primary)';
-        buttonText.innerText = 'Initializing...';
-
+        buttonText.innerText = 'Entering...';
 
         setTimeout(() => {
-            alert("Welcome! The 3D Environment is currently under construction. Please check back soon for the full experience.");
-
-            buttonText.innerText = originalText;
-            portal.style.background = 'rgba(0, 0, 0, 0.6)';
-            portal.style.width = '';
-            portal.style.borderRadius = '';
-        }, 1500);
+            window.location.href = 'three.html';
+        }, 800);
     }
 
 
@@ -57,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let dragOffsetX = 0;
     let dragOffsetY = 0;
 
-    // Removed unused isWaitingForResponse and sessionId
+
 
     const roomReplies = [
         "I'm here. Keep going.",
